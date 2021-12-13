@@ -34,7 +34,7 @@ def convert():
     return
   factorStart = factors[units.index(startUnit)]
   factorEnd = factors[units.index(endUnit)]
-  conversion = float(value.get()) * (factorEnd / factorStart)
+  conversion = round(float(value.get()) * (factorEnd / factorStart), 2)
   # Add text to label
   Label(window, text = str(conversion) + " " + endUnit + " are in " + value.get() + " " + startUnit).grid(row = 5, column = 0, columnspan = 8)
   
