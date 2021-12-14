@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Squishy's YouTube Downloader</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <style>
+    .container {
+      max-width: 960px;
+    }
+
+    .card {
+      margin-top: 20px;
+    }
+
+    .card-body {
+      padding: 0;
+    }
+
+    body {
+      overflow: hidden;
+    }
+    
+  </style>
+<body class="bg-light">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12 mt-4">
+        <h1 class="text-center">Squishy's YouTube Downloader</h1>
+        <p class="text-center">
+          Download videos from YouTube in a single click. (under 60 seconds)
+        </p>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <div>
+          <div class="d-flex">
+            <input id="input" type="text" class="form-control mr-2" name="url" placeholder="Paste YouTube URL here"
+              placeholder="https://www.youtube.com/watch?v=...">
+          </div>
+          <div class="d-flex mt-2">
+            <button class="btn btn-primary mr-2" onclick="download()">Download</button>
+          </div>
+        </div>
+      </div>
+      <p style="bottom:0;position:absolute">Please be responsible and don't use this tool for illegal purposes.</p>
+      <script>
+        let downloadApi = "https://squishydl.herokuapp.com/api/download";
+        function download() {
+          let youtubeUrl = document.querySelector("#input").value;
+          let youtubeId = youtubeUrl.split("=")[1];
+          let url = "173.79.147.118:5000/yt?id=" + youtubeId;
+          // Download video
+          fetch(url).then(function(response) {
+            return response.blob();
+          }).then(function(blob) {
+            let url = window.URL.createObjectURL(blob);
+            let a = document.createElement("a");
+            a.href = url;
+            a.download = "video.mp4";
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+          });
+        }
+      </script>
+</body>
+
+</html>

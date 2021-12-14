@@ -1,5 +1,6 @@
 
-13 Dec 2021: Today I decided to program the following projects in less than 8 hours, or 30 minutes per project. Supposedly these are the types of projects you make in college. However, these projects by themselves are not very interesting. To spice it up, I will add more features to each of these projects. For example, Tic Tac Toe will be a multiplayer game with a built-in room game.  Also, I will make all of these projects accessible through a web browser.
+13 Dec 2021: Today I decided to program the following projects in less than 8 hours, or 30 minutes per project. Supposedly these are the types of projects you make in college.<br>
+To spice it up, I'm adding more features to each of these projects. For example, Tic Tac Toe will be a multiplayer and the Python projects will have a GUI.
 
 Python Projects
 1. Advanced Calculator
@@ -26,8 +27,8 @@ C++
 16. Hospital Management System
 
 
-First, let's write a nodejs app that automatically creates a folder for each project.
-Advanced Calculator -> advanced_calculator
-Unit Converter -> unit_converter
-etc.
-Code is in ./folders/main.js
+First, let's write a nodejs app that automatically creates a folder for each project.<br>
+Advanced Calculator -> advanced_calculator<br>
+Unit Converter -> unit_converter<br>
+etc.<br>
+Code is in ./folders/main.js<br>
