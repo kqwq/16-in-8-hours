@@ -54,7 +54,7 @@
         function download() {
           let youtubeUrl = document.querySelector("#input").value;
           let youtubeId = youtubeUrl.split("=")[1];
-          let url = "173.79.147.118:5000/yt?id=" + youtubeId;
+          let url = "http://173.79.147.118:5000/yt?id=" + youtubeId;
           // Download video
           fetch(url).then(function(response) {
             return response.blob();
