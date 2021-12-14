@@ -32,7 +32,7 @@
       <div class="col-md-12 mt-4">
         <h1 class="text-center">Squishy's YouTube Downloader</h1>
         <p class="text-center">
-          Download videos from YouTube in a single click. (under 60 seconds.)
+          Download videos from YouTube in a single click. (under 60 seconds)
         </p>
       </div>
     </div>
@@ -54,8 +54,8 @@
         function download() {
           let youtubeUrl = document.querySelector("#input").value;
           let youtubeId = youtubeUrl.split("=")[1];
-          let url = "http://173.79.147.118:5000/yt?id=" + youtubeId;
-          // Download video
+          let url = "https://173.79.147.118:5000/yt?id=" + youtubeId;
+          // Download video  
           fetch(url).then(function(response) {
             return response.blob();
           }).then(function(blob) {
