@@ -2,8 +2,8 @@ from pytube import YouTube
 from flask import Flask, send_file
 from flask_restful import Resource, Api, reqparse
 from flask_cors import CORS
-from waitress import serve
 import ssl
+import os
 ssl._create_default_https_context = ssl._create_unverified_context
 
 def get_video(id):
@@ -36,7 +36,7 @@ class Base(Resource):
 class HelloWorld(Resource):
     def get(self):
         # Get ID argument from URL
-        parser = reqparse.RequestParser()
+        parser = reqparse.RequestParser() 
         parser.add_argument("id", type=str)
         args = parser.parse_args()
         id = args["id"]
@@ -47,5 +47,6 @@ api.add_resource(Base, '/')
 api.add_resource(HelloWorld, '/yt')
 
 if __name__ == '__main__':
-    serve(app, host='0.0.0.0', port=5000)
-    print("Server started")
+    # Bind to PORT if defined, otherwise default to 5000.
+    port = int(os.environ.get('PORT', 5000))
+    app.run(host='0.0.0.0', port=port)
