@@ -3,20 +3,15 @@ from flask import Flask, send_file
 from flask_restful import Resource, Api, reqparse
 from flask_cors import CORS
 from waitress import serve
-
+import ssl
+ssl._create_default_https_context = ssl._create_unverified_context
 
 def get_video(id):
   print("Downloading video..." + id)
   yt = YouTube("https://www.youtube.com/watch?v=" + id)
-  if (yt.length > 60):
-    print("Video is greater than 60 seconds, please try again")
-    return {
-      "status": "error",
-      "message": "Video is greater than 60 seconds, please try again"
-    }
-  ys = yt.streams.get_highest_resolution()
-  ys.download(filename="video.mp4")
-  return send_file("./video.mp4", mimetype="video/mp4")
+  video = yt.streams.filter(progressive=True, file_extension='mp4').order_by('resolution').desc().first()
+  video.download( filename = id+".mp4" )
+  return send_file(id + '.mp4', mimetype='video/mp4')
 
 
 app = Flask(__name__)
@@ -40,13 +35,17 @@ class Base(Resource):
 
 class HelloWorld(Resource):
     def get(self):
+        # Get ID argument from URL
         parser = reqparse.RequestParser()
-        parser.add_argument('id')
+        parser.add_argument("id", type=str)
         args = parser.parse_args()
-        return get_video(args['id'])
+        id = args["id"]
+        print("ID: " + id)
+        return get_video(id)
 
 api.add_resource(Base, '/')
 api.add_resource(HelloWorld, '/yt')
 
 if __name__ == '__main__':
     serve(app, host='0.0.0.0', port=5000)
+    print("Server started")
