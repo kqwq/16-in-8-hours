@@ -1,0 +1,11 @@
+{
+  "name": "tic-tac-toe",
+  "desc": "Based on default\nDefault project",
+  "version": "1.0",
+  "author": "kqwq2",
+  "isTemplate": false,
+  "lastUpdated": 1639788383095,
+  "players": [],
+  "maxPlayers": "2",
+  "views": 39
+}
