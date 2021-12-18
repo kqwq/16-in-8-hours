@@ -1,0 +1,14 @@
+{
+  "name": "6_hangman_game",
+  "version": "1.0.0",
+  "description": "A: I'm not going to put in a ton of effort for a game that's so simple.",
+  "main": "hangman.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "file-system": "^2.2.2"
+  }
+}
