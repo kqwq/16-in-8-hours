@@ -2,10 +2,6 @@
 import Globe from 'globe.gl';
 import { spawnWeatherTooltip } from './weather';
 
-import _ from 'lodash';
-
-console.log(_.chunk([1, 2, 3, 4, 5, 6, 7, 8, 9, 10], 3));
-
 // Import SASS
 import './app.sass'
 
@@ -30,6 +26,8 @@ myGlobe(document.getElementById('app'))
   .backgroundImageUrl('https://unpkg.com/three-globe/example/img/night-sky.png')
 
   .pointLabel(p => p.html)
+  .pointColor(p => p.color)
+  .pointRadius(p => p.size)
   .lineHoverPrecision(0)
   
 // Onclick event
