@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>default</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.7.2/p5.js"></script>
+  <link rel="stylesheet" href="https://unpkg.com/purecss@2.0.6/build/pure-min.css" >
+  <style>
+body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+#write-in {
+  display: none; /* Until state: write-in */
+  position: absolute;
+  top: 25%;
+  left: 25%;
+  width: 50%;
+  background-color: rgba(255, 255, 255);
+  border-radius: 6px;
+  padding: 10px;
+  max-height: 50%;
+  overflow: auto;
+}
+#answers {
+  display: flex;
+  flex-direction: column;
+}
+#answers input {
+  display: block;
+  margin-bottom: 5px;
+}
+#write-q {
+  width: 80%;
+  margin-bottom: 10px;
+}
+label{
+  text-align: right;
+  clear: both;
+  float:left;
+  margin-right:15px;
+  padding-right: 20px;
+}
+.button-error {
+  color: white;
+  background: rgb(202, 60, 60);
+}
+  </style>
+</head>
+
+
+
+<body>
+
+<div id="write-in" class="pure-form">
+  <fieldset>
+    <legend>Submit your own trivia question</legend>
+    <label for="write-q">Question</label>
+    <input type="text" id="write-q" placeholder="e.g. How many Bytes are in a Kilobyte?">
+    <div id="answers">
+      <div><label for='a-1'>A</label><input id='a-1' type="text"></div>
+      <div><label for='b-1'>B</label><input id='b-1' type="text"></div>
+      <div><label for='c-1'>C</label><input id='c-1' type="text"></div>
+      <div><label for='d-1'>D</label><input id='d-1' type="text"></div>
+    </div>
+    <label for="correct">Correct choice</label>
+    <select id="correct">
+      <option value="0">A</option>
+      <option value="1">B</option>
+      <option value="2">C</option>
+      <option value="3">D</option>
+    </select><br>
+    <button onclick="writeIn()" class="pure-button pure-button-primary">Submit</button>
+    <i>Anything inappropriate will result in a ban</i><br>
+    <br>
+    <button onclick="deleteAll()" class="pure-button button-error">Remove all my questions</button>
+  </fieldset>
+</div>
+  <script>
+var buttonIndex = 0;
+var rainbowColors;
+var question = "Loading..."
+var choices = [];
+var qIndex = 0;
+var author = "none"
+var lastDate = new Date()
+var nextDate = new Date()
+nextDate.setSeconds(nextDate.getSeconds()+100)
+
+var points = 0
+var myChoice;
+var answerCount = 0;
+var playerCount = 0;
+  
+var buttons = [];
+class Button {
+  constructor(letter, ratioX, ratioY, ratioW, ratioH) {
+    buttons.push(this);
+    this.index = buttonIndex++;
+    this.letter = letter;
+    this.ratioX = ratioX;
+    this.ratioY = ratioY;
+    this.ratioW = ratioW;
+    this.ratioH = ratioH;
+    this.text = ""
+    this.isHover = false;
+    this.isSelected = false;
+    this.resize();
+    this.color = color(10, 190, 30);
+    this.white = color(255, 255, 255);
+    this.transparent = color(255, 0);
+    this.opacity = 0;
+    this.opacityGoto = 0;
+  }
+  
+  resize() {
+    this.x = windowWidth * this.ratioX;
+    this.y = windowHeight * this.ratioY;
+    this.w = windowWidth * this.ratioW;
+    this.h = windowHeight * this.ratioH;
+  }
+  
+  fadeOut() {
+    this.opacityGoto = 0;
+    this.isHover = false;
+    this.isSelected = false;
+  }
+  
+  fadeIn() {
+    this.opacityGoto = 1;
+    this.isHover = false;
+    this.isSelected = false;
+  }
+  
+  update() {
+    this.opacity += (this.opacityGoto - this.opacity) * 0.07;
+    if (this.opacity < 0.05) return;
+    let hw = this.w>>1;
+    let hw2 = this.w * 0.55;
+    let hh = this.h>>1;
+    this.isHover = mouseX > this.x-hw2 && mouseX < this.x+hw2 && mouseY > this.y-hh && mouseY < this.y+hh;
+    if (this.isHover) {
+      cursor("pointer");
+      if (mouseIsPressed) {
+        this.isSelected = true;
+        myChoice = this.index;
+        sendToServer({
+          command: "answer",
+          response: myChoice
+        })
+      }
+    } else {
+      if (mouseIsPressed) {
+        this.isSelected = false;
+      }
+    }
+    rectMode(CENTER);
+    strokeWeight(this.isSelected ? 4 : 0);
+    stroke(0);
+    fill(lerpColor(this.transparent, lerpColor(this.color, this.white, this.isSelected * 0.5 + this.isHover * 0.12), this.opacity));
+    beginShape();
+    vertex(this.x - hw2, this.y);
+    vertex(this.x - hw, this.y - hh);
+    vertex(this.x + hw, this.y - hh);
+    vertex(this.x + hw2, this.y);
+    vertex(this.x + hw, this.y + hh);
+    vertex(this.x - hw, this.y + hh);
+    vertex(this.x - hw2, this.y);
+    endShape(CLOSE);
+    //rect(this.x, this.y, this.w, this.h);
+    noStroke();
+    
+    fill(0, 255*this.opacity);
+    textAlign(CENTER, CENTER);
+    textSize(min(1.25 * this.w / this.text.length, this.h * 0.85))
+    text(`${this.letter}. ${this.text}`, this.x, this.y)
+  }
+}
+
+function setup() {
+
+  createCanvas(windowWidth, windowHeight);
+  noStroke();
+  angleMode("degrees");
+
+  rainbowColors = [
+    color(255, 0, 0),
+    color(255, 255, 0),
+    color(0, 255, 0),
+    color(0, 255, 255),
+    color(0, 0, 255),
+    color(255, 0, 255),
+  ];
+  
+  new Button("A", 0.25, 0.45, 0.4, 0.15)
+  new Button("B", 0.75, 0.45, 0.4, 0.15)
+  new Button("C", 0.25, 0.7, 0.4, 0.15)
+  new Button("D", 0.75, 0.7, 0.4, 0.15)
+}
+
+function windowResized() {
+  resizeCanvas(windowWidth, windowHeight);
+  buttons.forEach(b => b.resize())
+}
+
+function keyPressed() {
+  //count ++;// For debugging purposes
+}
+
+function draw() {
+  cursor("auto");
+  // Background
+  var bgColor = rainbowColors[(qIndex) % rainbowColors.length];
+  background(lerpColor(color(0), bgColor, 0.8));
+
+  // Fan blades
+  fill(lerpColor(color(255), bgColor, 0.9));
+  for (var i = 0; i < 10; i ++) {
+    var angle1 = i*36+millis()/100;
+    var angle2 = i*36 + 18+millis()/100;
+
+    triangle(width/2, height/2,
+       width/2+width*cos(angle1), height/2+width*sin(angle1),
+     width/2+width*cos(angle2), height/2+width*sin(angle2));
+  }
+
+  // Title
+  fill(255);
+  strokeWeight(4);
+  stroke(0);
+  textSize(min(40, width*0.1));
+  textFont("Sans-serif");
+  textStyle(BOLD);
+  textAlign(CENTER, TOP);
+  text(question, width*0.5, height* 0.1);
+  noStroke();
+  textStyle(NORMAL);
+
+  // Buttons
+  buttons.forEach(b => b.update());
+
+  // Progress bar
+  rectMode(CORNER);
+  let now  = new Date()
+  let diff1 = now - lastDate;
+  let diff2 = nextDate - now;
+  let progress = diff1 / (diff1 + diff2);
+  fill(0, 200, 255);
+  rect(0, height - 3, progress * width, 3);
+    
+  // Answered, points, seconds left
+  fill(255);
+  stroke(0);
+  strokeWeight(4);
+  textSize(width*0.02)
+  textAlign(LEFT, BOTTOM)
+  text(`${answerCount} / ${playerCount} players`, 10, height-5)
+  textAlign(RIGHT)
+  let secs = Math.round(diff2/1000)
+  text(`${secs} second${secs === 1 ? "" : "s"} left`, width-10, height-5)
+  textSize(width*0.03)
+  textAlign(CENTER, BOTTOM)
+  text(`Score: ${points}`, width/2, height-5)
+  noStroke()
+}
+  </script>
+  <script>
+    // Get data from server
+    addEventListener("message", ({ source, data }) => {
+      if (!source.uid) return; // Do not remove this line
+      let json = JSON.parse(data);
+      console.log(json);
+      switch (json.state) {
+        
+        case "ask":
+          document.getElementById("write-in").style.display = "none";
+          answerCount = 0;
+          buttons.map(b => b.fadeIn());
+          qIndex = json.qIndex;
+          question = `${json.qIndex + 1}. ${json.question}`;
+          let i = 0;
+          for (let choice of json.choices) {
+            buttons[i++].text = choice;
+          }
+          author = json.author;
+          break;
+          
+        case "result":
+          question = `Answer ${buttons[json.correct].letter} was correct!`
+          for (let i = 0; i < buttons.length; i++) {
+            if (i == json.correct) { // correct button
+              if (i == myChoice) {
+                points ++;
+              }
+            } else { // wrong button
+              buttons[i].fadeOut();
+            }
+          }
+          break;
+          
+        case "write-in":
+          document.getElementById("write-in").style.display = "block"
+          question = "Add your own question!"
+          buttons.map(b => b.fadeOut())
+          break;
+          
+        case "update":
+          if (json.count) {
+            alert(`Removed ${json.count} questions`)
+            break;
+          }
+          answerCount = json.answerCount
+          playerCount = json.playerCount
+          break;
+          
+        default:
+          console.log("Error", state);
+      }
+
+      if (json.state !== "update") {
+        lastDate = new Date()
+        nextDate = new Date()
+        nextDate.setSeconds(nextDate.getSeconds() + json.nextSeconds);
+      }
+    });
+    
+    // Send data to server
+    function sendToServer(data) {
+      postMessage(data, "*");
+    }
+    
+    function writeIn() {
+      document.getElementById("write-in").style.display = "none"
+      question = "Submitted! Waiting for next round..."
+      sendToServer({
+        command: "add-question",
+        response: {
+          question: document.querySelector("#write-q").value,
+          choices: [...document.querySelectorAll("#answers input")].map(ele => ele.value),
+          correct: parseInt(document.querySelector("#correct").value)
+        }
+      })
+      // Reset
+      document.querySelectorAll("#question").value = ""
+      document.querySelectorAll("#answers input").forEach(ele => ele.value = "")
+    }
+    function deleteAll() {
+      let delAll = confirm("Are you sure you want to remove all your trivia questions from the database? This is unreversable. ")
+      if (delAll) {
+        sendToServer({
+          command: "delete-all"
+        })
+      }
+    }
+  </script>
+</body>
+</html>

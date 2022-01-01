@@ -1,0 +1,11 @@
+{
+  "name": "quiz-app",
+  "desc": "Based on default",
+  "version": "yes",
+  "author": "kqwq2",
+  "isTemplate": false,
+  "lastUpdated": 1639970096557,
+  "players": [],
+  "maxPlayers": "50",
+  "views": 17
+}

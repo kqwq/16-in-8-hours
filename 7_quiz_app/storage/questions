@@ -1,0 +1,98 @@
+[
+  {
+    "question": "How long is a fortnite?",
+    "choices": [
+      "2 Days",
+      "7 Days",
+      "14 Days",
+      "49 Days"
+    ],
+    "correct": 2,
+    "author": "Squishy",
+    "date": "2022-01-01T04:48:34.929Z"
+  },
+  {
+    "question": "Who was the first U.S. President?",
+    "choices": [
+      "Ben Franklin",
+      "George Washington",
+      "John Adams",
+      "George W. Bush"
+    ],
+    "correct": 1,
+    "author": "Squishy",
+    "date": "2022-01-01T04:48:34.929Z"
+  },
+  {
+    "question": "How many days are in a year?",
+    "choices": [
+      "100",
+      "300",
+      "370",
+      "365"
+    ],
+    "correct": 3,
+    "author": "kqwq2",
+    "date": "2022-01-01T05:33:04.768Z"
+  },
+  {
+    "question": "Why aren't more people playing Jackbox on The Planet?",
+    "choices": [
+      "Sponge is unpopular",
+      "The Planet is unpopular",
+      "Jackbox is unpopular",
+      "All the above"
+    ],
+    "correct": 3,
+    "author": "guest-00004",
+    "date": "2022-01-01T05:33:07.641Z"
+  },
+  {
+    "question": "What's 13 squared?",
+    "choices": [
+      "144",
+      "169",
+      "159",
+      "149"
+    ],
+    "correct": 1,
+    "author": "kqwq2",
+    "date": "2022-01-01T05:35:45.797Z"
+  },
+  {
+    "question": "Is this the final question?",
+    "choices": [
+      "Yes",
+      "No",
+      "Reply hazy ask again later",
+      "[empty]"
+    ],
+    "correct": 3,
+    "author": "guest-00004",
+    "date": "2022-01-01T05:35:50.498Z"
+  },
+  {
+    "question": "what year is it",
+    "choices": [
+      "2022",
+      "2021",
+      "2020",
+      "2019"
+    ],
+    "correct": 0,
+    "author": "guest-00007",
+    "date": "2022-01-01T05:37:20.337Z"
+  },
+  {
+    "question": "Which came first the chicken or the egg?",
+    "choices": [
+      "Chicken",
+      "Egg",
+      "Chicken",
+      "Chickensssssssssssssssssssssssssssssssssss"
+    ],
+    "correct": 1,
+    "author": "kqwq2",
+    "date": "2022-01-01T05:39:48.555Z"
+  }
+]
