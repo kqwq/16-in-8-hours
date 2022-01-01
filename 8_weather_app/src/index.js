@@ -1,13 +1,13 @@
 // Use Globe.gl with webpack
-import Globe from 'globe.gl';
-import { spawnWeatherTooltip } from './weather';
+import Globe from 'globe.gl'
+import { spawnWeatherTooltip } from './weather'
 
 // Import SASS
 import './app.sass'
 
 // Remove margins and padding
-document.body.style.margin = 0;
-document.body.style.padding = 0;
+document.body.style.margin = 0
+document.body.style.padding = 0
 
 const globeImages = {
   day: 'https://upload.wikimedia.org/wikipedia/commons/c/c3/Solarsystemscope_texture_2k_earth_daymap.jpg',
@@ -20,7 +20,7 @@ const globeImages = {
   clouds: 'https://upload.wikimedia.org/wikipedia/commons/e/ed/Solarsystemscope_texture_2k_earth_clouds.jpg'
 }
 
-const myGlobe = Globe();
+const myGlobe = Globe()
 myGlobe(document.getElementById('app'))
   .globeImageUrl(globeImages.day)
   .backgroundImageUrl('https://unpkg.com/three-globe/example/img/night-sky.png')
@@ -29,14 +29,14 @@ myGlobe(document.getElementById('app'))
   .pointColor(p => p.color)
   .pointRadius(p => p.size)
   .lineHoverPrecision(0)
-  
+
 // Onclick event
 myGlobe.onGlobeClick(e => {
-  spawnWeatherTooltip(e.lat, e.lng, myGlobe);
-});
+  spawnWeatherTooltip(e.lat, e.lng, myGlobe)
+})
 
 // On resize event
 window.addEventListener('resize', (event) => {
   myGlobe.width([event.target.innerWidth])
   myGlobe.height([event.target.innerHeight])
-});
+})
