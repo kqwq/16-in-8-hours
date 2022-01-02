@@ -1,8 +1,8 @@
 
-
-
 let apiKey = '147283db80fa8ad10af2072f2858a689'
 let points = []
+let language
+let units
 
 function changeLanguage(_language) { 
   language = _language
@@ -25,8 +25,8 @@ async function spawnWeatherTooltip(lat, lng, globe) {
   console.log(json)
   let celsius = parseInt(json.main.temp - 273.15)
 
-  let flagUrl = `https://flagcdn.com/h20/${json.sys.country.toLowerCase()}.png`
-  let countryName = new Intl.DisplayNames(['en'], {type: 'region'}).of(json.sys.country)
+  const flagUrl = `https://flagcdn.com/h20/${json.sys.country.toLowerCase()}.png`
+  const countryName = new Intl.DisplayNames(['en'], {type: 'region'}).of(json.sys.country)
 
   let html = `<div class="weather-tooltip">
     <div class="weather-tooltip-header">
@@ -46,7 +46,7 @@ async function spawnWeatherTooltip(lat, lng, globe) {
     lat: lat,
     lng: lng,
     color: temperatureToColor(celsius),
-    size: 0.2,
+    size: 0.3,
     html: html
   })
   globe.pointsData(points)
